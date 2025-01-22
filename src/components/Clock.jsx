@@ -60,12 +60,24 @@ class Clock extends React.Component {
   startStop() {
     if (this.state.isRunning) {
       clearInterval(this.state.intervalId);
-      this.setState({ isRunning: false });
+      this.setState({
+        isRunning: false,
+      });
     } else {
       this.setState({
         isRunning: true,
         intervalId: setInterval(() => {
           if (this.state.timeLeft === 0) {
+            if (this.state.timerLabel === "break") {
+              clearInterval(this.state.intervalId);
+              this.setState({
+                isRunning: false,
+              });
+              setInterval(() => {
+                document.getElementById("time-label").textContent = "Session";
+                document.getElementById("time-left").style.color = "white";
+              }, 2000);
+            }
             this.setState((state) => ({
               timerLabel: state.timerLabel === "Session" ? "Break" : "Session",
               timeLeft:
