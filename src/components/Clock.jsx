@@ -73,11 +73,19 @@ class Clock extends React.Component {
                   ? state.breakLength
                   : state.sessionLength) * 60,
             }));
-
             document.getElementById("beep").play();
             document.getElementById("time-left").style.color = "red";
-            document.getElementById("time-left").style.color = "red";
           } else {
+            if (
+              this.state.timeLeft <= 60 ||
+              this.state.timerLabel === "Break"
+            ) {
+              document.getElementById("time-left").style.color = "red";
+              document.getElementById("timer-label").style.color = "red";
+            } else {
+              document.getElementById("time-left").style.color = "white";
+              document.getElementById("timer-label").style.color = "white";
+            }
             this.setState((state) => ({
               timeLeft: state.timeLeft - 1,
             }));
@@ -97,6 +105,7 @@ class Clock extends React.Component {
       intervalId: null,
     });
     document.getElementById("time-left").style.color = "white";
+    document.getElementById("timer-label").style.color = "white";
     document.getElementById("beep").pause();
     document.getElementById("beep").currentTime = 0;
   }
@@ -177,8 +186,8 @@ class Clock extends React.Component {
         >
           <h3 id="timer-label">{this.state.timerLabel}</h3>
           <span id="time-left">
-            {minutes < 10 ? "0" + minutes : minutes}:
-            {seconds < 10 ? "0" + seconds : seconds}
+            {minutes < 10 && minutes >= 0 ? "0" + minutes : minutes}:
+            {seconds < 10 && seconds >= 0 ? "0" + seconds : seconds}
           </span>
           <audio id="beep" src={beep} />
         </div>
